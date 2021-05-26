@@ -72,10 +72,15 @@ bool Date::validateDate(int &day, int &month, int &year) {
     return true;
 }
 
+struct Authors{
+    std::string name;
+    std::string surname;
+};
+
 
 class Book {
 public:
-    void setAuthor(std::string author) {
+    void setAuthor(Authors author) {
         author_ = author;
     };
     void setTitle(std::string title) {
@@ -95,7 +100,7 @@ public:
     std::string getBook();
 
 private:
-    std::string author_;
+    Authors author_;
     std::string title_;
     int pages_;
     std::string type_;
@@ -103,14 +108,17 @@ private:
 };
 
 void Book::inputBookInConsole() {
-    std::string author;
+    Authors author;
     std::string title;
     int pages;
     Date date;
     std::string type;
     std::cout << "Добавление книги" << "\n";
-    std::cout << "Введите автора книги:  ";
-    std::cin >> author;
+    std::cout << "Введите автора книги:  " << "\n";
+    std::cout << "Имя: ";
+    std::cin >> author.name;
+    std::cout << "Фамилия: ";
+    std::cin >> author.surname;
 
     setAuthor(author);
     std::cout << "Введите название книги:  ";
@@ -135,6 +143,6 @@ std::string Book::getBook() {
 
 int main() {
     Book book;
-    book.setBookInConsole();
+    book.inputBookInConsole();
     return 0;
 }

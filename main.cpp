@@ -48,29 +48,28 @@ void Date::setNewDate() {
 }
 
 bool Date::validateDate(int &day, int &month, int &year) {
-    bool isValidDate = true;
     bool isleapYear = false;
     if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0) {
         isleapYear = true;
     }
     if (day < 1 || day > 31) {
-        isValidDate = false;
+        return false;
     }
     if (month < 1 || month > 12) {
-        isValidDate = false;
+        return false;
     }
     if (month == 2 && day > 29 && isleapYear) {
-        isValidDate = false;
+        return false;
     }
     if (month == 2 && day > 28 && !isleapYear) {
-        isValidDate = false;
+        return false;
     }
     if (month == 4 || month == 6 || month == 9 || month == 11) {
         if (day > 30) {
-            isValidDate = false;
+            return false;
         }
     }
-    return isValidDate;
+    return true;
 }
 
 class Book {

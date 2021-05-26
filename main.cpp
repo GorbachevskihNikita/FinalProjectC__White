@@ -72,25 +72,69 @@ bool Date::validateDate(int &day, int &month, int &year) {
     return true;
 }
 
+
 class Book {
 public:
-    void setAuthor(std::string author);
-    void setTitle(std::string title);
+    void setAuthor(std::string author) {
+        author_ = author;
+    };
+    void setTitle(std::string title) {
+        title_ = title;
+    };
     void setDatePublishing(Date datePublishing);
+    void setPages(int numberOfPages) {
+        pages_ = numberOfPages;
+    }
+    void setTypeBook(std::string type) {
+        type_ = type;
+    }
+    void setDateBook(Date date) {
+        date_ = date;
+    };
+    void inputBookInConsole();
+    std::string getBook();
 
 private:
-    std::string author;
-    std::string title;
-    Date date;
-    int pages;
-    std::string type;
+    std::string author_;
+    std::string title_;
+    int pages_;
+    std::string type_;
+    Date date_;
 };
 
+void Book::inputBookInConsole() {
+    std::string author;
+    std::string title;
+    int pages;
+    Date date;
+    std::string type;
+    std::cout << "Добавление книги" << "\n";
+    std::cout << "Введите автора книги:  ";
+    std::cin >> author;
 
+    setAuthor(author);
+    std::cout << "Введите название книги:  ";
+    std::cin >> title;
+
+    setTitle(title);
+    std::cout << "Введите количество страниц книги:  ";
+    std::cin >> pages;
+
+    setPages(pages);
+    std::cout << "Введите тип книги:  ";
+    std::cin >> type;
+
+    setTypeBook(type);
+    std::cout << "Введите дату издания книги:  " << "\n";
+    date.setNewDate();
+}
+
+std::string Book::getBook() {
+    return std::string();
+}
 
 int main() {
-    Date date;
-    date.setNewDate();
-    date.printDate(date);
+    Book book;
+    book.setBookInConsole();
     return 0;
 }

@@ -13,6 +13,7 @@
 
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 
 class Date {
@@ -38,13 +39,16 @@ void Date::printDate(const Date &date) {
 
 
 void Date::setNewDate() {
-    std::cout << "Input Day: ";
-    std::cin >> Date::day_;
-    std::cout << " Input Month: ";
-    std::cin >> Date::month_;
-    std::cout << " Input Year: ";
-    std::cin >> Date::year_;
-    validateDate(day_, month_, year_);
+    std::cout << " Введите дату (dd:mm:yyyy): ";
+    std::cin >> std::setw(2) >> day_;
+    std::cin.ignore();
+    std::cin >> std::setw(2) >> month_;
+    std::cin.ignore();
+    std::cin >> std::setw(4) >> year_;
+    while (!validateDate(day_, month_, year_)) {
+        std::cout << "Неверный формат даты \n";
+        setNewDate();
+    }
 }
 
 bool Date::validateDate(int &day, int &month, int &year) {
@@ -52,6 +56,7 @@ bool Date::validateDate(int &day, int &month, int &year) {
     if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0) {
         isleapYear = true;
     }
+    if (day.)
     if (day < 1 || day > 31) {
         return false;
     }
@@ -72,21 +77,14 @@ bool Date::validateDate(int &day, int &month, int &year) {
     return true;
 }
 
-struct Authors{
-    std::string name;
-    std::string surname;
-};
-
-
 class Book {
 public:
-    void setAuthor(Authors author) {
+    void setAuthor(std::string author) {
         author_ = author;
     };
     void setTitle(std::string title) {
         title_ = title;
     };
-    void setDatePublishing(Date datePublishing);
     void setPages(int numberOfPages) {
         pages_ = numberOfPages;
     }
@@ -100,7 +98,7 @@ public:
     std::string getBook();
 
 private:
-    Authors author_;
+    std::string author_;
     std::string title_;
     int pages_;
     std::string type_;
@@ -108,33 +106,32 @@ private:
 };
 
 void Book::inputBookInConsole() {
-    Authors author;
+    std::string author;
     std::string title;
     int pages;
     Date date;
     std::string type;
+
     std::cout << "Добавление книги" << "\n";
-    std::cout << "Введите автора книги:  " << "\n";
-    std::cout << "Имя: ";
-    std::cin >> author.name;
-    std::cout << "Фамилия: ";
-    std::cin >> author.surname;
-
+    std::cout << "Введите автора книги:  ";
+    std::getline(std::cin,author);
     setAuthor(author);
-    std::cout << "Введите название книги:  ";
-    std::cin >> title;
 
+    std::cout << "Введите название книги:  ";
+    std::getline(std::cin, title);
     setTitle(title);
+
     std::cout << "Введите количество страниц книги:  ";
     std::cin >> pages;
-
     setPages(pages);
-    std::cout << "Введите тип книги:  ";
-    std::cin >> type;
 
+    std::cout << "Введите тип книги:  ";
+    std::getline(std::cin, type);
     setTypeBook(type);
-    std::cout << "Введите дату издания книги:  " << "\n";
+
+    std::cout << "\nВведите дату издания книги:  " << "\n";
     date.setNewDate();
+    setDateBook(date);
 }
 
 std::string Book::getBook() {
@@ -143,6 +140,13 @@ std::string Book::getBook() {
 
 int main() {
     Book book;
+    std::string reply;
+
     book.inputBookInConsole();
+    std::cout << "Добавить еще одну книгу? (да/нет): ";
+    std::getline(std::cin,reply);
+    while (reply == "да" && !reply.empty()){
+        book.inputBookInConsole();
+    }
     return 0;
 }

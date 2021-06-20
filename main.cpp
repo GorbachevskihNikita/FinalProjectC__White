@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <clocale>
 
 
 class Date {
@@ -56,7 +57,6 @@ bool Date::validateDate(int &day, int &month, int &year) {
     if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0) {
         isleapYear = true;
     }
-    if (day.)
     if (day < 1 || day > 31) {
         return false;
     }
@@ -139,6 +139,7 @@ std::string Book::getBook() {
 }
 
 int main() {
+    std::setlocale(LC_ALL, "Russian");
     Book book;
     std::string reply;
 

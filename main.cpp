@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
+#include <clocale>
 #include "Date.h"
 #include "Book.h"
 

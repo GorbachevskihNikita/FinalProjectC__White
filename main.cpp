@@ -14,22 +14,8 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <clocale>
-
-
-class Date {
-public:
-    void printDate(const Date &date);
-    void setNewDate();
-    bool validateDate(int &day, int &month, int &year);
-    int getDay() const { return day_; }
-    int getMonth() const { return month_; }
-    int getYear() const { return year_; }
-private:
-    int day_;
-    int month_;
-    int year_;
-};
+#include "Date.h"
+#include "Book.h"
 
 
 void Date::printDate(const Date &date) {
@@ -76,34 +62,6 @@ bool Date::validateDate(int &day, int &month, int &year) {
     }
     return true;
 }
-
-class Book {
-public:
-    void setAuthor(std::string author) {
-        author_ = author;
-    };
-    void setTitle(std::string title) {
-        title_ = title;
-    };
-    void setPages(int numberOfPages) {
-        pages_ = numberOfPages;
-    }
-    void setTypeBook(std::string type) {
-        type_ = type;
-    }
-    void setDateBook(Date date) {
-        date_ = date;
-    };
-    void inputBookInConsole();
-    std::string getBook();
-
-private:
-    std::string author_;
-    std::string title_;
-    int pages_;
-    std::string type_;
-    Date date_;
-};
 
 void Book::inputBookInConsole() {
     std::string author;

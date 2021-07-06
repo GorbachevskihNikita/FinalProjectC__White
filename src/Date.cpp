@@ -2,9 +2,9 @@
 // Created by Nikita on 06.07.2021.
 //
 
-#pragma once
 #include "Date.h"
 #include <iomanip>
+#include <iostream>
 
 void Date::printDate(const Date &date) {
     std::cout << "Day: " << date.day_ << " "

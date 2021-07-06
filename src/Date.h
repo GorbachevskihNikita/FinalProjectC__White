@@ -1,6 +1,7 @@
 //
 // Created by Nikita on 06.07.2021.
 //
+#pragma once
 
 class Date {
 public:

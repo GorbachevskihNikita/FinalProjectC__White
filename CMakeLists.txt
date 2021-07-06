@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.19)
-project(FinalProjectCppWhite)
+project(FinalProjectCppWhite CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(SOURCE_EXE main.cpp)

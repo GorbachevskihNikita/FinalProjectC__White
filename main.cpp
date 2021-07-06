@@ -11,12 +11,11 @@
      Перегруженные операции: сравнение двух дат (< , >).
  **/
 
-#pragma once
 #include <iostream>
 #include <string>
 #include <clocale>
-#include "src/Date.cpp"
-#include "src/Book.cpp"
+#include "src/Date.h"
+#include "src/Book.h"
 
 int main() {
     std::setlocale(LC_ALL, "Russian");

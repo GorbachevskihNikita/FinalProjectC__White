@@ -3,6 +3,7 @@
 //
 #include "Book.h"
 #include <string>
+#include <iostream>
 
 void Book::setAuthor(std::string author) {
     author_ = author;

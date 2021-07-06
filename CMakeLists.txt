@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.19)
-project(FinalProjectC__White)
+project(FinalProjectCppWhite)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
+set(SOURCE_EXE main.cpp)
 
-add_executable(FinalProjectC++White main.cpp Date.h Book.h)
+add_executable(main ${SOURCE_EXE})
+add_subdirectory(src)
+
+target_link_libraries(main lib)

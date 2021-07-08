@@ -10,42 +10,43 @@ defaults:
 
 jobs:
   build:
-    name: ${{ matrix.config.name }}-${{ matrix.config.compiler }}-${{ matrix.config.version }}
+    name: ${{ matrix.config.name }}
     runs-on: ${ { matrix.config.os } }
     strategy:
       fail-fast: false
       matrix:
         config:
           - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
-            os: windows-latest,
-            build_type: "Release", cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-          }
-          - {
-              name: "Windows Latest MinGW", artifact: "Windows-MinGW.tar.xz",
-              os: windows-latest,
-              build_type: "Release", cc: "gcc", cxx: "g++"
-            }
-          - {
-              name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
-              os: ubuntu-latest,
-              build_type: "Release", cc: "gcc", cxx: "g++"
-            }
-          - {
-              name: "macOS Latest Clang", artifact: "macOS.tar.xz",
+              name: "macOS Latest Clang",
               os: macos-latest,
-              build_type: "Release", cc: "clang", cxx: "clang++"
+              artifact: "macos_clang.7z",
+              build_type: "Release", 
+              cc: "clang",
+              cxx: "clang++",
+              archiver: "7za a",
+              generators: "Ninja"
             }
     steps:
+      - uses: actions/checkout@v2
+      - name: Print env
+        run: |
+            echo github.event.action: ${{ github.event.action }}
+            echo github.event_name: ${{ github.event_name }}
+      - name: Install dependencies on macOS
+        if: startsWith(matrix.config.os, 'macos')
+        run: |
+            brew install p7zip cmake ninja
+            ninja --version
+            cmake --version
       - name: Configure
+        shell: bash
         run: |
             mkdir build
-            cd build
-            cmake .. -GNinja -DCMAKE_BUILD_TYPE:Release
+            cmake /
+              -S . \
+              -B . \
+              -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
+              -G "${{ matrix.config.generators }}"
       - name: Build
-        run: ninja
-      - name: Test
-        run: |
-            cd build
-            ./main
+        shell: bash
+        run: cmake --build . --config ${{ matrix.config.build_type }}

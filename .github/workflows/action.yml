@@ -52,7 +52,7 @@ jobs:
         run: cmake --build . --config ${{ matrix.config.build_type }}
       - name: Upload release
         if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
-        uses: actions/upload-release@v1
+        uses: actions/checkout@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

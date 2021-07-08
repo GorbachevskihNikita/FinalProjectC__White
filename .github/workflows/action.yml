@@ -50,9 +50,9 @@ jobs:
       - name: Build
         shell: bash
         run: cmake --build . --config ${{ matrix.config.build_type }}
-      - name: Upload release
+      - name: Upload release 
         if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
-        uses: actions/checkout@v2
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

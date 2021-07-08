@@ -50,13 +50,13 @@ jobs:
       - name: Build
         shell: bash
         run: cmake --build . --config ${{ matrix.config.build_type }}
-      - name: Upload release 
-        if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Strip
+        run: ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake --install build --prefix instdir --strip
+      - name: Pack
+        working-directory: instdir
+        run: ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake -E tar cJfv ../${{ matrix.config.artifact }}
+      - name: Upload
+        uses: actions/upload-artifact@v1
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./${{ matrix.config.artifact }}
-          asset_name: ${{ matrix.config.artifact }}.zip
-          asset_content_type: application/zip
+          path: ./${{ matrix.config.artifact }}
+          name: ${{ matrix.config.artifact }}

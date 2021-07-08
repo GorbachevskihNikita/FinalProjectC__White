@@ -26,13 +26,13 @@ jobs:
             version: "8"
   steps:
     - name: Configure
-        run: |
+        run:
           mkdir build
           cd build
           cmake .. -GNinja -DCMAKE_BUILD_TYPE:Release
     - name: Build
         run: ninja
     - name: Test
-        run: |
+        run:
           cd build
           ./main

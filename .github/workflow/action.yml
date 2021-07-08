@@ -1,33 +1,38 @@
-name: CMake Build Project
+name: Build
 
-on: [push]
+on: 
+  push:
+    branches: [ master ]
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
-    name: ${ { project.config.name } }
-    runs-on: ${ { project.config.name } }
+    name: ${{ matrix.config.name }}-${{ matrix.config.compiler }}-${{ matrix.config.version }}
+    runs-on: ${ { matrix.config.os } }
     strategy:
       fail-fast: false
-      project:
+      matrix:
         config:
-         - {
-            name: "Windows Latest MSVC", artifact: "Windows-MSVC.tar.xz",
-            os: windows-latest,
-            build_type: "Release", cc: "cl", cxx: "cl",
-            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
-          }
-        - {
-            name: "Windows Latest MinGW", artifact: "Windows-MinGW.tar.xz",
-            os: windows-latest,
-            build_type: "Release", cc: "gcc", cxx: "g++"
-          }
-        - {
-            name: "Ubuntu Latest GCC", artifact: "Linux.tar.xz",
-            os: ubuntu-latest,
-            build_type: "Release", cc: "gcc", cxx: "g++"
-          }
-        - {
-            name: "macOS Latest Clang", artifact: "macOS.tar.xz",
-            os: macos-latest,
-            build_type: "Release", cc: "clang", cxx: "clang++"
-          }
+          - os: window-latest
+            compiler: msvc  
+          - os: ubuntu-18.04
+            compiler: gcc
+            version: "7.4"
+          - os: macOS-latest
+            compiler: clang
+            version: "8"
+  steps:
+    - name: Configure
+        run: |
+          mkdir build
+          cd build
+          cmake .. -GNinja -DCMAKE_BUILD_TYPE:Release
+    - name: Build
+        run: ninja
+    - name: Test
+        run: |
+          cd build
+          ./main

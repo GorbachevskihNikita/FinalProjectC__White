@@ -32,12 +32,14 @@ jobs:
         run: |
             echo github.event.action: ${{ github.event.action }}
             echo github.event_name: ${{ github.event_name }}
+
       - name: Install dependencies on macOS
         if: startsWith(matrix.config.os, 'macos')
         run: |
             brew install p7zip cmake ninja
             ninja --version
             cmake --version
+
       - name: Configure
         shell: bash
         run: |
@@ -48,16 +50,23 @@ jobs:
               -B . \
               -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} \
               -G "${{ matrix.config.generators }}"
+
       - name: Build
         shell: bash
         run: cmake --build . --config ${{ matrix.config.build_type }}
+
       - name: Install Strip
-        run: ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake --install build --prefix instdir --strip
+        shell: bash
+        run: cmake --install . --strip
+
       - name: Pack
         working-directory: instdir
-        run: ${{ steps.cmake_and_ninja.outputs.cmake_dir }}/cmake -E tar cJfv ../${{ matrix.config.artifact }}
+        run: |
+          ls -laR
+          ${{ matrix.config.archiver }} ../${{ matrix.config.artifact }}
+
       - name: Upload
         uses: actions/upload-artifact@v1
-        with:
+        with: 
           path: ./${{ matrix.config.artifact }}
-          name: ${{ matrix.config.artifact }}
+          name: ${{ matrix.config.artifact }}      

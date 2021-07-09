@@ -24,8 +24,18 @@ jobs:
               cc: "cl",
               cxx: "cl",
               environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat",
-              archiver: "7za a",
+              archiver: "7z a",
               generators: "Visual Studio 16 2019"
+            }
+          - {
+              name: "Windows Latest MinGW",
+              os: windows-latest,
+              artifact: "windows_mingw.7z",
+              build_type: "Release",
+              cc: "gcc",
+              cxx: "g++",
+              archiver: "7z a",
+              generators: "Ninja"
             }
           - {
               name: "macOS Latest Clang",
@@ -35,6 +45,16 @@ jobs:
               cc: "clang",
               cxx: "clang++",
               archiver: "7za a",
+              generators: "Ninja"
+            }
+          - {
+              name: "Ubuntu_Latest_GCC",
+              os: ubuntu-latest,
+              artifact: "ubuntu_gcc.7z",
+              build_type: "Release",
+              cc: "gcc",
+              cxx: "g++",
+              archiver: "7z a",
               generators: "Ninja"
             }
     steps:
@@ -57,6 +77,15 @@ jobs:
             brew install p7zip cmake ninja
             ninja --version
             cmake --version
+
+      - name: Install dependecies on Ubuntu
+        if: startsWith(matrix.config.os, 'Ubuntu_Latest_GCC')
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build cmake
+          ninja --version
+          cmake --version
+          gcc --version
 
       - name: Configure
         shell: bash
@@ -88,4 +117,15 @@ jobs:
         uses: actions/upload-artifact@v1
         with: 
           path: ./${{ matrix.config.artifact }}
-          name: ${{ matrix.config.artifact }}      
+          name: ${{ matrix.config.artifact }}
+
+      - name: Upload Release Asset
+        if: github.event_name == 'release' && (github.event.action == 'published' || github.event.action == 'created')
+        uses: actions/upload-release-assset@v1
+        env:
+          GITHUB_TOKEN: ${{ secret.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload.url }}
+          asset_path: ./${{ matrix.config.artifact }}
+          asset_name: ${{ matrix.config.artifact }}.zip
+          asset_content_type: application/zip

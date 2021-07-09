@@ -79,7 +79,7 @@ jobs:
             cmake --version
 
       - name: Install dependecies on Ubuntu
-        if: startsWith(matrix.config.os, 'Ubuntu_Latest_GCC')
+        if: startsWith(matrix.config.name, 'Ubuntu_Latest_GCC')
         run: |
           sudo apt-get update
           sudo apt-get install ninja-build cmake

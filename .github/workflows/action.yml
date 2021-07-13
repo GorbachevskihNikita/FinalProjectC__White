@@ -1,15 +1,32 @@
-name: C++ CI
+name: Build
 
-on: [push]
+on: 
+  push:
+    branches: [ master ]
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         configs: [Release]
     steps:
-      uses: UnsafePointer/cmake-clang-ninja-build-github-action@v1.4
+      - uses: actions/checkout@v2
+      - name: Get latest CMake and ninja
+        uses: lukka/get-cmake@latest 
+      - name: Build & Test
+        uses: ashutoshvarma/action-cmake-build@master
         with:
-          dir: "src"
+          build-dir: ${{ runner.workspace }}/build
+          cxx: g++
+          build-type: Release
+          run-test: true
+          ctest-options: -R mytest
+          install-build: true
+    

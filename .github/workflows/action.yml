@@ -1,9 +1,9 @@
 name: Build
-on: push
+
 jobs:
   gcc-snapshot:
     runs-on: ubuntu-latest
     steps:
       - uses: johelegp/gcc-snapshot@v1
       - uses: actions/checkout@v2
-      - uses: johelegp/modern-cmake-buildsystem@v1ß
+      - uses: johelegp/modern-cmake-buildsystem@v1

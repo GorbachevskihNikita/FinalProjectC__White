@@ -10,14 +10,6 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         configs: [Release]
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.0.0
-    - name: Build project
-      uses: nicledomaS/cmake_build_action@v1.4
-      with:
-        config: ${{ matrix.configs }}
-        create_package: ON
-    - uses: actions/upload-artifact@v2
-      with:
-        path: build/*.tar.gz
-        name: artifact_${{ matrix.os }}_${{ matrix.configs }}.tar.gz
+      uses: UnsafePointer/cmake-clang-ninja-build-github-action@v1.4
+        with:
+          dir: "src"

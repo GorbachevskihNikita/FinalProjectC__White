@@ -1,32 +1,23 @@
 name: Build
 
-on: 
-  push:
-    branches: [ master ]
-
-defaults:
-  run:
-    shell: bash
-
 jobs:
   build:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        configs: [Release]
+    env: 
+      buildDir: '${{ github.workspace }}/build'
     steps:
-      - uses: actions/checkout@v2
-      - name: Get latest CMake and ninja
-        uses: lukka/get-cmake@latest 
-      - name: Build & Test
-        uses: ashutoshvarma/action-cmake-build@master
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v6
         with:
-          build-dir: ${{ runner.workspace }}/build
-          cxx: g++
-          build-type: Release
-          run-test: true
-          ctest-options: -R mytest
-          install-build: true
-    
+          setupOnly: true
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
+          vcpkgTriplet: ${{ matrix.triplet }}
+          additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
+      - name: 'Run CMake with Ninja, install dependencies with vcpkg, build with CMake'
+        uses: lukka/run-cmake@v3
+        with:
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
+          useVcpkgToolchainFile: true
+          cmakeAppendedArgs: '-GNinja'
+          buildDirectory: ${{ env.buildDir }}

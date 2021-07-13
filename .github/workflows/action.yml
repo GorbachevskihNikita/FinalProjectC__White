@@ -16,9 +16,6 @@ jobs:
       uses: nicledomaS/cmake_build_action@v1.4
       with:
         config: ${{ matrix.configs }}
-        submodule_update: ON
-        run_tests: ON
-        cmake_args: -DFIND_MODULES=ON;-DENABLE_TIDY=ON
         create_package: ON
     - uses: actions/upload-artifact@v2
       with:

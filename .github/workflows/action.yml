@@ -1,5 +1,5 @@
 name: Build
-
+on: push
 jobs:
   gcc-snapshot:
     runs-on: ubuntu-latest

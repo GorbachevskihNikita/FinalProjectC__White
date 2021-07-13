@@ -6,6 +6,4 @@ jobs:
     steps:
       - uses: johelegp/gcc-snapshot@v1
       - uses: actions/checkout@v2
-      - uses: johelegp/modern-cmake-buildsystem@v1
-        with:
-          generate-options: "--preset=test"
+      - uses: johelegp/modern-cmake-buildsystem@v1ß

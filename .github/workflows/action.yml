@@ -1,23 +1,11 @@
 name: Build
 
 jobs:
-  build:
-    env: 
-      buildDir: '${{ github.workspace }}/build'
+  gcc-snapshot:
+    runs-on: ubuntu-latest
     steps:
-      - name: Run vcpkg
-        uses: lukka/run-vcpkg@v6
+      - uses: johelegp/gcc-snapshot@v1
+      - uses: actions/checkout@v2
+      - uses: johelegp/modern-cmake-buildsystem@v1
         with:
-          setupOnly: true
-          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-          appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
-          vcpkgTriplet: ${{ matrix.triplet }}
-          additionalCachedPaths: ${{ env.buildDir }}/vcpkg_installed
-      - name: 'Run CMake with Ninja, install dependencies with vcpkg, build with CMake'
-        uses: lukka/run-cmake@v3
-        with:
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeListsTxtPath: '${{ github.workspace }}/cmakesettings.json/CMakeLists.txt'
-          useVcpkgToolchainFile: true
-          cmakeAppendedArgs: '-GNinja'
-          buildDirectory: ${{ env.buildDir }}
+          generate-options: "--preset=test"

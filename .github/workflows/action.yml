@@ -12,17 +12,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2.0.0
-        
       - name: Build project
         uses: nicledomaS/cmake_build_action@v1.4
         with:
           config: ${{ matrix.configs }}
           submodule_update: ON
-          run-tests: ON
+          run_tests: ON
           unit_test_build: -DFIND_TESTS=ON
           cmake_args: -DFIND_MODULES=ON;-DENABLE_TIDY=ON
           create_package: ON
       - uses: actions/upload-artifact@v2
         with:
-          path: build/*.zip
-          name: artifact_${{ matrix.os }}_${{ matrix.configs }}.zip
+          path: build/*.tar.gz
+          name: artifact_${{ matrix.os }}_${{ matrix.configs }}.tar.gz

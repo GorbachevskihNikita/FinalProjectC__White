@@ -8,17 +8,16 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        configs: [Release, Debug]
+        configs: [Release]
     steps:
     - name: Checkout
       uses: actions/checkout@v2.0.0
     - name: Build project
-      uses: nicledomaS/cmake_build_action@v1.4
+      uses: nicledomaS/cmake_build_action@v1.4ß
       with:
         config: ${{ matrix.configs }}
         submodule_update: ON
         run_tests: ON
-        unit_test_build: -DFIND_TESTS=ON
         cmake_args: -DFIND_MODULES=ON;-DENABLE_TIDY=ON
         create_package: ON
     - uses: actions/upload-artifact@v2

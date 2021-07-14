@@ -8,14 +8,18 @@ defaults:
 
 jobs:
   build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
     strategy: 
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-    name: ${{ matrix.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: cmake-clang-ninja-build
-        uses: UnsafePointer/cmake-clang-ninja-build-github-action@v1.4
+      - name: Install ninja-build tool
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
+

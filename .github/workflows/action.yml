@@ -23,6 +23,14 @@ jobs:
       - name: Setup Ninja
         uses: ashutoshvarma/setup-ninja@v1.1
 
+      - name: Get CMake
+        uses: symbitic/install-cmake@master
+        
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
+
       - name: Build with CMake
         uses: ashutoshvarma/action-cmake-build@master
         with:

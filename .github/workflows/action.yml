@@ -12,29 +12,25 @@ jobs:
     runs-on: ${{ matrix.config.os }}
     strategy:
       matrix:
-        config:
-          - { name: "Windows MSVC", os: windows-latest, cxx: "cl" }
-          - { name: "Ubuntu gcc", os: ubuntu-latest, cxx: "g++" }
-          - { name: "MacOS clang", os: macos-latest, cxx: "clang++" }
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        config: [Release]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@v1.1
+      - name: Setup C++ environment
+        uses: kurocha/setup-cpp@v1
 
-      - name: Get CMake
-        uses: symbitic/install-cmake@master
-        
-      - name: Set up Visual Studio shell
-        uses: egor-tensin/vs-shell@v2
+      - name: Build c++ project
+        uses: nicledomaS/cmake_build_action@v1.4
         with:
-          arch: x64
-
-      - name: Build with CMake
-        uses: ashutoshvarma/action-cmake-build@master
+          config: ${{ matrix.config }}
+          run_tests: ON
+          create_package: ON
+          package_generator: ZIP
+ß
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
         with:
-          build-dir: ${{ runner.workspace }}/build
-          cxx: ${{ matrix.config.cxx }}
-          configure-options: -G Ninja
-          build-type: Release
+          path: build/*.zip
+          name: artifact_${{ matrix.os }}_${{ matrix.config }}.zip

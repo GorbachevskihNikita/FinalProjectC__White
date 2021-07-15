@@ -28,7 +28,7 @@ jobs:
           run_tests: ON
           create_package: ON
           package_generator: ZIP
-ß
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
